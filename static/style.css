@@ -22,7 +22,18 @@ body {
 }    
 .header a {
     float: left;
-    color: black;
+    color: var(--text-color);
+    text-align: center;
+    padding: 12px;
+    text-decoration: none;
+    font-size: 18px; 
+    line-height: 25px;
+    border-radius: 4px;
+}
+
+span{
+    float: left;
+    color: var(--text-color);
     text-align: center;
     padding: 12px;
     text-decoration: none;
@@ -37,6 +48,14 @@ body {
     color: var(--text-color);
     text-transform: uppercase;
     font-family: 'Inter', monospace;
+    padding-left: 15%;
+    pointer-events: none;
+    cursor: default;
+}
+
+.header a.logo:hover {
+    background-color: inherit;
+    color: var(--text-color);
 }
 
 .header a:hover {
@@ -46,7 +65,7 @@ body {
 
 .header a.active {
     background-color: var(--primary-color);
-    color: white;
+    color: black;
 }
 
 .header-right {
