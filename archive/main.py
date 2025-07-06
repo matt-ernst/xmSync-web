@@ -8,7 +8,7 @@ import msvcrt
 from spotipy.oauth2 import SpotifyOAuth
 from dotenv import load_dotenv
 from datetime import datetime
-from stations import stations
+from archive.stations import stations
 
 global_buffer = ""             #Stores last song that the API called (Prevents repeat songs each API call)
 global_stationID = ""          #Stores the station ID that the user wants to listen to

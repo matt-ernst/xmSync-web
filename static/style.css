@@ -7,7 +7,18 @@
     --background-color: #f0f0f0;
 }
 
-* {box-sizing: border-box;}
+#main{
+    border-top: 2px outset #2A3331;
+    border-radius: 40px 40px 40px 40px;
+    padding-top: 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-bottom: 2rem;
+    margin-top: 2rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
 
 body { 
     margin: 0;
