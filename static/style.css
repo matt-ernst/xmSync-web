@@ -7,7 +7,7 @@
     --background-color: #f0f0f0;
 }
 
-#main{
+#main {
     border-top: 2px outset #2A3331;
     border-radius: 40px 40px 40px 40px;
     padding-top: 2rem;
@@ -20,35 +20,37 @@
 }
 
 
-body { 
+body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
+    justify-content: center;
 }
 
 .header {
     overflow: hidden;
     background-color: var(--tertiary-color);
     padding: 20px 10px;
-    
-}    
+
+}
+
 .header a {
     float: left;
     color: var(--text-color);
     text-align: center;
     padding: 12px;
     text-decoration: none;
-    font-size: 18px; 
+    font-size: 18px;
     line-height: 25px;
     border-radius: 4px;
 }
 
-span{
+span {
     float: left;
     color: var(--text-color);
     text-align: center;
     padding: 12px;
     text-decoration: none;
-    font-size: 18px; 
+    font-size: 18px;
     line-height: 25px;
     border-radius: 4px;
 }
@@ -92,5 +94,21 @@ span{
 
     .header-right {
         float: none;
-}
+    }
+
+    .center-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    #player {
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        border-radius: 10px;
+        transform: translate(-50%, -50%);
+    }
+
 }

@@ -16,13 +16,16 @@ SPOTIFY_CLIENT_ID = "5313474a55be44d4acfdae1423805b70"
 SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET") 
 REDIRECT_URI = "http://127.0.0.1:8888/callback"
 
-
-
 @app.route("/")
 def index():
     display_name = session.get('display_name')
 
     return render_template("index.html", display_name=display_name)
+
+@app.route("/dashboard")
+def dashboard():
+    display_name = session.get('display_name')
+    return render_template("dashboard.html", display_name=display_name)
 
 @app.route("/login")
 def login():

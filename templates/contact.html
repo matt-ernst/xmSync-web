@@ -4,6 +4,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <title>xmSync - Contact</title>
 </head>
 
 <body>
@@ -12,9 +13,10 @@
         <div class="header-right">
             <a href="{{ url_for('index') }}">Home</a>
             <a href="{{ url_for('about') }}">About</a>
-            <a class="active" href="#contact">Contact</a>
+            <a class = "active" href="{{ url_for('contact') }}">Contact</a>
 
             {% if display_name %}
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
             <a href="{{ url_for('logout') }}">Logout</a>
             <span>Welcome, {{ display_name|e }}!</span>
             {% else %}
