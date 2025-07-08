@@ -15,7 +15,7 @@ app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET")
 SPOTIFY_CLIENT_ID = "5313474a55be44d4acfdae1423805b70"
 SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET") 
-REDIRECT_URI = "http://127.0.0.1:8888/callback"
+REDIRECT_URI = "http://xmsync.com/callback"
 
 def format_display_name(key):
     return key.replace('_', ' ').title()
