@@ -23,14 +23,16 @@ body {
 
 /* ====== Header Styles ====== */
 .header {
-    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: var(--tertiary-color);
     padding: 20px 10px;
 }
 
 .header a,
-span {
-    float: left;
+.header span {
+    float: none;               /* Remove float */
     color: var(--text-color);
     text-align: center;
     padding: 12px;
@@ -38,6 +40,7 @@ span {
     font-size: 18px;
     line-height: 25px;
     border-radius: 4px;
+    margin: 0 10px;            /* Space between links */
 }
 
 .header a.logo {
@@ -45,9 +48,10 @@ span {
     font-weight: bold;
     text-transform: uppercase;
     font-family: 'Inter', monospace;
-    padding-left: 15%;
+    padding-left: 0;
     pointer-events: none;
     cursor: default;
+    margin-right: 20px;
 }
 
 .header a.logo:hover {
@@ -66,8 +70,10 @@ span {
 }
 
 .header-right {
-    float: right;
-}
+    float: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;}
 
 /* ====== Player Styles ====== */
 .center-container {

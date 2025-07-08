@@ -43,7 +43,7 @@ function pollStation() {
         if (data.song) {
             songInfoDiv.innerHTML = `
                 <img src="${data.song.Image}" alt="Song Image" width="200"><br>
-                <strong>${data.song.Title}</strong> by ${data.song.Artist}<br>Added to Queue
+                <strong><em>${data.song.Title}</em></strong><br>${data.song.Artist}<br><em>Added to Queue</em>
             `;
         } else {
             songInfoDiv.textContent = 'No Playable Song Found, Try a Different Station';
