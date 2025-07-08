@@ -1,19 +1,14 @@
 stations = {
-    # Pop & Top 40
     "hits": "siriusxmhits1",              # Pop hits, now to next
     "unwell": "unwellmusic",              # Daddy's Unwell soundtrack XL
     "tiktok": "tiktokradio",              # Trending sounds from TikTok
     "pulse": "thepulse",                  # Today's pop music
     "poprocks": "poprocks",               # 90s & 2000s pop/rock hits
-    
-    # Decades
     "70s on 7": "70son7",                      # 70s pop hits
     "80s on 8": "80son8",                      # Pop hits from the MTV era
     "90s on 9": "90son9",                      # Pop hits from the 90s
     "Pop2K": "pop2k",                     # 2000s pop hits
     "The 10s Spot": "the10sspot",                # 2010s pop hits
-
-    # Artist Channels
     "Kelly Clarkson": "kellyclarksonconnection",   # Kelly's handpicked faves
     "Pitbull": "pitbullsglobalization",   # Worldwide rhythmic hits
     "John Mayer": "lifewithjohnmayer",     # Your personal soundtrack
@@ -28,8 +23,6 @@ stations = {
     "U2": "u2xradio",                     # The whole world of U2
     "RHCP": "redhotchilipeppers",         # Whole Lotta RHCP
     "Bon Jovi": "bonjoviradio",            # Bon Jovi and Jon's other faves
-
-    # Rock & Alternative
     "Underground": "undergroundgarage",    # Maximum rock & soul
     "Classic Rewind": "classicrewind",     # 70s/80s classic rock
     "Classic Vinyl": "classicvinyl",       # 60s/70s classic rock
@@ -44,8 +37,6 @@ stations = {
     "Hair": "hairnation",                  # 80s hair metal & glam
     "Metal": "liquidmetal",                # Heavy metal XL
     "Turbo": "siriusxmturbo",             # 90s/2000s hard rock XL
-
-    # Hip-Hop & R&B
     "Drake": "sound42",                    # Music culture by Drake
     "Rock the Bells": "rockthebellsradio",  # Classic & timeless hip-hop XL
     "Hip-Hop": "hiphopnation",             # The sound of the culture XL
@@ -56,14 +47,10 @@ stations = {
     "Flex 2K": "flex2k",                      # Hip-hop hits from the 2000s
     "Fly": "siriusxmfly",                  # 90s & 2000s hip-hop/R&B XL
     "Groove": "thegroove",                 # 70s/80s R&B
-
-    # Dance & Electronic
     "BPM": "bpm",                         # The biggest dance tracks
     "Diplo": "diplosrevolution",          # Diplo's global house party
     "Studio 54": "studio54radio",          # Classic dance hits
     "Chill": "siriusxmchill",             # Downtempo & deep house
-
-    # Country
     "Highway": "thehighway",              # Next generation country music
     "Y2K": "y2kountry",                   # 2000s and 2010s country hits
     "Prime Country": "primecountry",      # 80s/90s country hits
@@ -72,25 +59,17 @@ stations = {
     "Willie": "williesroadhouse",        # Willie's classic country
     "Outlaw": "outlawcountry",           # Music that won't be fenced in
     "Stapleton": "chrisstapletonradio",   # Chris Stapleton's channel
-
-    # Christian & Gospel
     "Kirk": "kirkfranklinspraise",        # Kirk Franklin's gospel channel
     "Message": "themessage",              # Contemporary Christian
-
-    # Jazz & Standards
     "Watercolors": "watercolors",         # Smooth and contemporary jazz
     "Real Jazz": "realjazz",               # Classic jazz
     "Sinatra": "siriuslysinatra",         # Standards by Sinatra & more
-
-    # Mood & Specialty
     "Spa": "spa",                         # New age
     "Broadway": "onbroadway",             # Show tunes
     "Margaritaville": "radiomargaritaville", # Escape to Margaritaville
     "Mosaic": "mosaic",                   # Relaxing 90s & 2000s pop
     "Blend": "theblend",                  # Nice & easy 70s & 80s pop
     "Coffeehouse": "thecoffeehouse",      # Acoustic, stripped down songs
-
-    # Kids & Family
     "Disney": "disneyhits",               # Wonderful world of Disney hits
     "Kids": "kidsplace",                  # Kids' music
     "Kidzbop": "kidzbopradio",            # Pop hits sung by kids for kids
