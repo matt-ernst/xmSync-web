@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title>xmSync - Home</title>
+</head>
+
+<body>
+  <div class="header">
+    <a href="#default" class="logo">xmSync</a>
+    <div class="header-right">
+      <a class="active" href="{{ url_for('index') }}">Home</a>
+      <a href="{{ url_for('contact') }}">Contact</a>
+
+      {% if display_name %}
+      <a href="{{ url_for('dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+      <span id="welcomeMessage">Welcome, {{ display_name|e }}!</span>
+      {% else %}
+      <a href="{{ url_for('login') }}">Login</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div id="main">
+    <section id="welcome-xmsync">
+      <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">Welcome to xmSync</h1>
+
+      <p>
+        <strong>xmSync</strong> is an open-source project that bridges the gap between SiriusXM’s distinctive music
+        curation and modern streaming platforms like Spotify. Inspired by the unique variety found on stations such as
+        John Mayer Radio, xmSync empowers users to bring that same diversity to their Spotify queue—even if they can’t
+        access SiriusXM directly.
+      </p>
+
+      <h2>What is xmSync?</h2>
+      <p>
+        xmSync is a web and script-based application that:
+      <ul>
+        <li><strong>Automatically adds</strong> currently playing and newly discovered tracks from a SiriusXM station to
+          your Spotify queue.</li>
+        <li>Can be run via a <strong>Python script</strong> in a separate repository, from a <strong>web
+            interface</strong>, or hosted locally.</li>
+        <li>Is <strong>fully open source</strong>, allowing anyone to contribute or customize the project.</li>
+      </ul>
+      </p>
+
+      <h2>Why xmSync?</h2>
+      <p>
+        The project was inspired by the realization that SiriusXM’s John Mayer Radio station offered a richer, more
+        interesting mix than Spotify’s built-in radio. xmSync was created to provide everyone with access to that level
+        of music variety, regardless of their SiriusXM subscription status.
+      </p>
+
+      <h2>Key Features</h2>
+      <ul>
+        <li><strong>Automatic Queueing:</strong> Seamlessly syncs SiriusXM tracks to your Spotify queue in real time.
+        </li>
+        <li><strong>Flexible Deployment:</strong> Use xmSync as a web app, run it locally, or execute the Python
+          script—whatever fits your workflow.</li>
+        <li><strong>Open Source:</strong> Freely available for customization, contribution, and self-hosting.</li>
+        <li><strong>Future-Ready:</strong> Plans to support other platforms like Apple Music and YouTube Music.</li>
+      </ul>
+
+      <h2>Technical Highlights</h2>
+      <ul>
+        <li><strong>Python</strong> for backend logic and scripting</li>
+        <li><strong>Flask</strong> for the web application framework</li>
+        <li><strong>JavaScript, HTML, and CSS</strong> for a user-friendly interface</li>
+      </ul>
+
+      <h2>The Road Ahead</h2>
+      <p>
+        xmSync aims to become a universal bridge between the best of curated radio and the convenience of streaming.
+        Future updates will expand support to additional platforms, ensuring that more listeners can enjoy a richer,
+        more varied music experience—no matter where or how they listen.
+      </p>
+    </section>
+
+  </div>
+
+</body>
+
+</body>
+
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <title>xmSync - Dashboard</title>
+</head>
+
+<body>
+    <div class="header">
+        <a href="#default" class="logo">xmSync</a>
+        <div class="header-right">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('contact') }}">Contact</a>
+
+            {% if display_name %}
+            <a class="active" href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+            <span id="welcomeMessage">Welcome, {{ display_name|e }}!</span>
+            {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="main">
+        <h1></h1>
+    </div>
+
+    <div class="center-container">
+        <section = "welcome-xmsync">
+        <div id="player">
+            <div class="player-content">
+                <!-- Left: Song Info -->
+                <div class="song-section">
+                    <div id="songInfo">
+                        <span id="songName"></span><br/>
+                        <span id="artistName"></span>
+                    </div>
+                </div>
+
+                <!-- Right: Station Selector -->
+                <div class="station-section">
+                    <form id="stationForm">
+                        <select id="stationDropdown" name="station_name">
+                            <option value="" disabled selected>
+                                Select SiriusXM Station
+                            </option>
+                            {% for station in station_options %}
+                            <option value="{{ station.value }}">
+                                {{ station.display }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="Enter" />
+                    </form>
+                </div>
+            </div>
+            <script src="{{ url_for('static', filename='polling.js') }}"></script>
+        </div>
+        </section>
+    </div>
+</body>
+
+</html>

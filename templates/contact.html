@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <title>xmSync - Contact</title>
+</head>
+
+<body>
+    <div class="header">
+        <a href="#default" class="logo">xmSync</a>
+        <div class="header-right">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a class = "active" href="{{ url_for('contact') }}">Contact</a>
+
+            {% if display_name %}
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+            <span id="welcomeMessage">Welcome, {{ display_name|e }}!</span>
+            {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+            {% endif %}
+        </div>
+    </div>
+
+<div id="main">
+    <section id="welcome-xmsync">
+        <h1>Contact Us</h1>
+        <p>
+            If you have any questions, suggestions, or feedback regarding this project, please feel free to reach out or get involved with the Github Repo!
+        </p>
+        <p>
+            You can contact me via email at: <a href="mailto:matt@xmsync.com">matt@xmsync.com</a>
+        </p>
+
+        <h1>My Links</h1>
+        <ul>
+            <li><a href="https://github.com/matt-ernst/xmSync-web">xmSync-web GitHub Repository</a></li>
+            <li><a href="https://github.com/matt-ernst/xmSync">xmSync (Python Exclusive) GitHub Repository</a></li>
+            <li><a href="https://open.spotify.com/user/r5ymmgnjrbxhgg9q0qz6r6jzd">Follow me on Spotify!</a></li>
+        </ul>
+    </section>
+</div>
+</body>
+
+</html>
