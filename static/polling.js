@@ -12,7 +12,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
     form.addEventListener('submit', function (e) {
         e.preventDefault();
-        stationId = document.getElementById('stationInput').value;
+        stationId = document.getElementById('stationDropdown').value;
         document.getElementById('songInfo').innerText = "Polling station: " + stationId;
         if (pollingTimeout) clearTimeout(pollingTimeout);
         pollStation();
@@ -43,10 +43,10 @@ function pollStation() {
         if (data.song) {
             songInfoDiv.innerHTML = `
                 <img src="${data.song.Image}" alt="Song Image" width="200"><br>
-                <strong>${data.song.Title}</strong> by ${data.song.Artist} - Added to Queue
+                <strong>${data.song.Title}</strong> by ${data.song.Artist}<br>Added to Queue
             `;
         } else {
-            songInfoDiv.textContent = 'No song found.';
+            songInfoDiv.textContent = 'No Playable Song Found, Try a Different Station';
         }
 
         pollingTimeout = setTimeout(pollStation, pollInterval);

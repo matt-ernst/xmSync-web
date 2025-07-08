@@ -1,4 +1,4 @@
-/* bright, #1ED9AA - slightly darker, #3E8472 - darker, #2A3331 */
+/* ====== Color Variables ====== */
 :root {
     --primary-color: #1ED9AA;
     --secondary-color: #3E8472;
@@ -7,43 +7,28 @@
     --background-color: #f0f0f0;
 }
 
-#main {
-    border-top: 2px outset #2A3331;
-    border-radius: 40px 40px 40px 40px;
-    padding-top: 2rem;
-    padding-left: 2rem;
-    padding-right: 2rem;
-    padding-bottom: 2rem;
-    margin-top: 2rem;
-    margin-left: 1rem;
-    margin-right: 1rem;
-}
-
-
+/* ====== Layout Containers ====== */
 body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
+    background: var(--background-color);
     justify-content: center;
 }
 
+#main {
+    border-radius: 40px;
+    padding: 1rem;
+    margin: 1rem 1rem 0 1rem;
+}
+
+/* ====== Header Styles ====== */
 .header {
     overflow: hidden;
     background-color: var(--tertiary-color);
     padding: 20px 10px;
-
 }
 
-.header a {
-    float: left;
-    color: var(--text-color);
-    text-align: center;
-    padding: 12px;
-    text-decoration: none;
-    font-size: 18px;
-    line-height: 25px;
-    border-radius: 4px;
-}
-
+.header a,
 span {
     float: left;
     color: var(--text-color);
@@ -58,7 +43,6 @@ span {
 .header a.logo {
     font-size: 50px;
     font-weight: bold;
-    color: var(--text-color);
     text-transform: uppercase;
     font-family: 'Inter', monospace;
     padding-left: 15%;
@@ -85,30 +69,97 @@ span {
     float: right;
 }
 
-@media screen and (max-width: 500px) {
-    .header a {
+/* ====== Player Styles ====== */
+.center-container {
+    display: flex;
+    justify-content: center;
+}
+
+#player {
+    background: var(--tertiary-color);
+    border-radius: 20px;
+    padding: 2rem;
+    width: 600px;
+    margin: 0 auto;
+    box-shadow: 2px 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.player-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.song-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+#songIcon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #fff;
+}
+
+#songInfo {
+    color: var(--text-color);
+}
+
+#welcome-xmsync {
+    max-width: 700px;
+    margin: 2rem auto;
+    padding:
+        2rem;
+    background: #f9f9f9;
+    border-radius: 20px;
+    "
+
+}
+
+.station-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+#stationDropdown,
+#stationInput,
+input[type="submit"] {
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: none;
+    margin-bottom: 0.5rem;
+}
+
+/* ====== Responsive Styles ====== */
+@media (max-width: 700px) {
+    #player {
+        width: 95vw;
+        padding: 1rem;
+    }
+
+    .player-content {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 2rem;
+    }
+
+    .station-section {
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 500px) {
+
+    .header a,
+    .header-right {
         float: none;
         display: block;
         text-align: left;
     }
-
-    .header-right {
-        float: none;
-    }
-
-    .center-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-    }
-
-    #player {
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        border-radius: 10px;
-        transform: translate(-50%, -50%);
-    }
-
 }

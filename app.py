@@ -4,6 +4,7 @@ import base64
 import urllib.parse
 
 from dotenv import load_dotenv
+from stations import stations
 import requests
 from flask import Flask, redirect, render_template, request, session, jsonify
 import spotipy
@@ -16,6 +17,14 @@ SPOTIFY_CLIENT_ID = "5313474a55be44d4acfdae1423805b70"
 SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET") 
 REDIRECT_URI = "http://127.0.0.1:8888/callback"
 
+def format_display_name(key):
+    return key.replace('_', ' ').title()
+
+station_options = [
+    {"display": format_display_name(key), "value": value}
+    for key, value in stations.items()
+]
+
 @app.route("/")
 def index():
     display_name = session.get('display_name')
@@ -25,7 +34,7 @@ def index():
 @app.route("/dashboard")
 def dashboard():
     display_name = session.get('display_name')
-    return render_template("dashboard.html", display_name=display_name)
+    return render_template("dashboard.html", display_name=display_name, station_options=station_options)
 
 @app.route("/login")
 def login():
