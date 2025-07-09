@@ -9,8 +9,6 @@ import requests
 from flask import Flask, redirect, render_template, request, session, jsonify
 import spotipy
 
-load_dotenv()
-
 app = Flask(__name__)
 app.secret_key = os.environ("FLASK_SECRET")
 SPOTIFY_CLIENT_ID = os.environ("SPOTIFY_CLIENT_ID")
