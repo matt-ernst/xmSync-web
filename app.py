@@ -12,10 +12,10 @@ import spotipy
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET")
-SPOTIFY_CLIENT_ID = "5313474a55be44d4acfdae1423805b70"
-SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
-REDIRECT_URI = "https://xmsync.com/callback"
+app.secret_key = os.environ("FLASK_SECRET")
+SPOTIFY_CLIENT_ID = os.environ("SPOTIFY_CLIENT_ID")
+SPOTIFY_CLIENT_SECRET = os.environ("SPOTIFY_CLIENT_SECRET")
+REDIRECT_URI = os.environ.get("REDIRECT_URI")
 
 def format_display_name(key):
     return key.replace('_', ' ').title()
