@@ -10,9 +10,9 @@ from flask import Flask, redirect, render_template, request, session, jsonify
 import spotipy
 
 app = Flask(__name__)
-app.secret_key = os.environ("FLASK_SECRET")
-SPOTIFY_CLIENT_ID = os.environ("SPOTIFY_CLIENT_ID")
-SPOTIFY_CLIENT_SECRET = os.environ("SPOTIFY_CLIENT_SECRET")
+app.secret_key = os.environ.get("FLASK_SECRET")
+SPOTIFY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
+SPOTIFY_CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
 REDIRECT_URI = os.environ.get("REDIRECT_URI")
 
 def format_display_name(key):
