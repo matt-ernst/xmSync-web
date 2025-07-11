@@ -19,7 +19,7 @@ def format_display_name(key):
     return key.replace('_', ' ').title()
 
 station_options = [
-    {"display": format_display_name(key), "value": value}
+    {"display": key, "value": value}
     for key, value in stations.items()
 ]
 
