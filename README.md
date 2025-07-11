@@ -25,6 +25,48 @@ Key Features
 * Flask for the web application framework
 * JavaScript, HTML, and CSS for a user-friendly interface
 
+## Requirements
+* Spotify Premium
+* Users of [xmsync.com](https://xmsync.com) have to be whitelisted, if you would like to be added please send me your email address at [matt@xmsync.com](mailto:matt@xmsync.com), otherwise, continue reading for the instructions to host your own version locally.
+
 ## The Road Ahead
 
 xmSync aims to become a universal bridge between the best of curated radio and the convenience of streaming. Future updates will expand support to additional platforms, ensuring that more listeners can enjoy a richer, more varied music experience—no matter where or how they listen.
+
+---
+
+# Want to Host Locally? Way Cool!
+
+Due to [Spotify's April 15th, 2025 API limitations](https://developer.spotify.com/blog/2025-04-15-updating-the-criteria-for-web-api-extended-access), currently it is not possible to increase your Spotify Application User quota without being a registered organization, and without having >250k active users. My original vision was to host the website for it to be accessible to everyone, but that is not possible unless Spotify goes back on their API changes. I highly encourage anyone to host their own instance, instructions below.
+
+## 1.) Clone the Repository in your IDE or Terminal
+* Navigate to a convienent folder
+* Clone the project, `git clone https://github.com/matt-ernst/xmSync-web.git`
+
+## 2.) Create a Spotify Developer Application, Obtain Spotify API Keys
+* Visit the [Spotify Developer Dashboard](https://developer.spotify.com)
+* Log in with your Spotify account
+* Create a new application
+* Note down your Client ID and Client Secret
+* `https://127.0.0.1:8888/callback` can be your Redirect URI
+* Users of your application can be added here (max of 25), the owner is automatically given permission. 
+
+## 3.) Supply Credentials in Environment File
+* Create a .env file in the script directory
+  
+  ```
+  FLASK_SECRET=your_flask_secret_key
+  SPOTIFY_CLIENT_ID=your_spotify_client_id
+  SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+  REDIRECT_URI=https://127.0.0.1:8888/callback
+  ```
+
+## 4.) Install Project Dependencies
+* Navigate to the *xmSync-web* directory `cd xmSync-web`
+* Install the requirements, `pip install -r requirements.txt`
+* Run the app.py file, `python app.py`
+
+## 5.) Get Started
+* Navigate to `http://127.0.0.1:8888/`
+* Login! You're set!
+
