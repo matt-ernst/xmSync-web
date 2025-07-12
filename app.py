@@ -5,11 +5,14 @@ import urllib.parse
 
 from dotenv import load_dotenv
 from stations import stations
+from flask_cors import CORS
 import requests
 from flask import Flask, redirect, render_template, request, session, jsonify
 import spotipy
 
 app = Flask(__name__)
+CORS(app)
+
 app.secret_key = os.environ.get("FLASK_SECRET")
 SPOTIFY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
 SPOTIFY_CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
