@@ -1,5 +1,5 @@
 let stationId = null;
-let pollInterval = 30000; // 30 seconds
+let pollInterval = 20000; // 20 seconds
 let pollingTimeout = null;
 
 /**

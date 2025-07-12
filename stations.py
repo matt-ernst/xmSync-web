@@ -75,7 +75,7 @@ stations = {
     "75 - BB King's Bluesville": "bbkingsbluesville",
     "76 - Elvis Radio": "elvisradio",
     "77 - Bluegrass Junction": "bluegrassjunction",
-    "78 - Symphony Hall": "symphonyhall",
+    "78 - Symphony Hall": "symphonyhall"
     "79 - Bily Joel Channel": "billyjoelchannel",
     "105 - SiriusXM 105": "siriusxm105",
     "133 - Disney Hits": "disneyhits",
