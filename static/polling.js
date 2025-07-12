@@ -56,4 +56,3 @@ function pollStation() {
         pollingTimeout = setTimeout(pollStation, pollInterval);
     });
 }
-
