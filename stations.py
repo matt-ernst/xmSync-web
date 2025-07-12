@@ -1,77 +1,85 @@
 stations = {
-    "hits": "siriusxmhits1",              # Pop hits, now to next
-    "unwell": "unwellmusic",              # Daddy's Unwell soundtrack XL
-    "tiktok": "tiktokradio",              # Trending sounds from TikTok
-    "pulse": "thepulse",                  # Today's pop music
-    "poprocks": "poprocks",               # 90s & 2000s pop/rock hits
-    "70s on 7": "70son7",                      # 70s pop hits
-    "80s on 8": "80son8",                      # Pop hits from the MTV era
-    "90s on 9": "90son9",                      # Pop hits from the 90s
-    "Pop2K": "pop2k",                     # 2000s pop hits
-    "The 10s Spot": "the10sspot",                # 2010s pop hits
-    "Kelly Clarkson": "kellyclarksonconnection",   # Kelly's handpicked faves
-    "Pitbull": "pitbullsglobalization",   # Worldwide rhythmic hits
-    "John Mayer": "lifewithjohnmayer",     # Your personal soundtrack
-    "The Beatles": "thebeatleschannel",       # The Fab Four, 24/8
-    "Bob Marley": "bobmarleystuffgong",    # Bob's music/family recordings
-    "Bruce Springsteen": "estreetradio",        # Bruce Springsteen, 24/7
-    "Pearl Jam": "pearljamradio",          # Pearl Jam, 24/7
-    "Grateful Dead": "gratefuldead",           # Grateful Dead, 24/7
-    "Phish": "phishradio",                # The entire Phish multi-verse 24/7
-    "Dave Matthews": "davematthewsbandradio",      # 24/7 Dave Matthews Band
-    "Tom Petty": "tompettyradio",             # Music from rock icon Tom Petty
-    "U2": "u2xradio",                     # The whole world of U2
-    "RHCP": "redhotchilipeppers",         # Whole Lotta RHCP
-    "Bon Jovi": "bonjoviradio",            # Bon Jovi and Jon's other faves
-    "Underground": "undergroundgarage",    # Maximum rock & soul
-    "Classic Rewind": "classicrewind",     # 70s/80s classic rock
-    "Classic Vinyl": "classicvinyl",       # 60s/70s classic rock
-    "Bridge": "thebridge",                 # Mellow classic rock
-    "Spectrum": "thespectrum",             # Classic rock meets new rock
-    "First Wave": "1stwave",                # Classic alternative
-    "Lithium": "lithium",                  # 90s alternative & grunge rock
-    "SiriusXMU": "siriusxmu",                   # Indie & beyond
-    "Altnation": "altnation",              # The latest in alternative
-    "Octane": "octane",                    # New hard rock
-    "Boneyard": "ozzysboneyard",          # Hard and heavy classic rock
-    "Hair": "hairnation",                  # 80s hair metal & glam
-    "Metal": "liquidmetal",                # Heavy metal XL
-    "Turbo": "siriusxmturbo",             # 90s/2000s hard rock XL
-    "Drake": "sound42",                    # Music culture by Drake
-    "Rock the Bells": "rockthebellsradio",  # Classic & timeless hip-hop XL
-    "Hip-Hop": "hiphopnation",             # The sound of the culture XL
-    "Shade 45": "shade45",                  # Eminem's hip-hop channel XL
-    "The Heat": "theheat",                     # Hot R&B and hip-hop
-    "Heart & Soul": "heartsoul",                  # Adult R&B hits
-    "The Flow": "theflow",                     # R&B hits from the 2000s
-    "Flex 2K": "flex2k",                      # Hip-hop hits from the 2000s
-    "Fly": "siriusxmfly",                  # 90s & 2000s hip-hop/R&B XL
-    "Groove": "thegroove",                 # 70s/80s R&B
-    "BPM": "bpm",                         # The biggest dance tracks
-    "Diplo": "diplosrevolution",          # Diplo's global house party
-    "Studio 54": "studio54radio",          # Classic dance hits
-    "Chill": "siriusxmchill",             # Downtempo & deep house
-    "Highway": "thehighway",              # Next generation country music
-    "Y2K": "y2kountry",                   # 2000s and 2010s country hits
-    "Prime Country": "primecountry",      # 80s/90s country hits
-    "No Shoes": "noshoesradio",           # Kenny Chesney's music channel
-    "Carrie": "carriescountry",          # Carrie Underwood's own channel
-    "Willie": "williesroadhouse",        # Willie's classic country
-    "Outlaw": "outlawcountry",           # Music that won't be fenced in
-    "Stapleton": "chrisstapletonradio",   # Chris Stapleton's channel
-    "Kirk": "kirkfranklinspraise",        # Kirk Franklin's gospel channel
-    "Message": "themessage",              # Contemporary Christian
-    "Watercolors": "watercolors",         # Smooth and contemporary jazz
-    "Real Jazz": "realjazz",               # Classic jazz
-    "Sinatra": "siriuslysinatra",         # Standards by Sinatra & more
-    "Spa": "spa",                         # New age
-    "Broadway": "onbroadway",             # Show tunes
-    "Margaritaville": "radiomargaritaville", # Escape to Margaritaville
-    "Mosaic": "mosaic",                   # Relaxing 90s & 2000s pop
-    "Blend": "theblend",                  # Nice & easy 70s & 80s pop
-    "Coffeehouse": "thecoffeehouse",      # Acoustic, stripped down songs
-    "Disney": "disneyhits",               # Wonderful world of Disney hits
-    "Kids": "kidsplace",                  # Kids' music
-    "Kidzbop": "kidzbopradio",            # Pop hits sung by kids for kids
-    "Moonbug": "moonbugradio"             # Laugh Learn Grow with Moonbug
+    "2 - SiriusXM Hits 1": "siriusxmhits1",
+    "3 - Unwell Music": "unwellmusic",
+    "4 - TikTok Radio": "tiktokradio",
+    "5 - The Pulse": "thepulse",
+    "6 - PopRocks": "poprocks",
+    "7 - 70s on 7": "70son7",
+    "8 - 80s on 8": "80son8",
+    "9 - 90s on 9": "90son9",
+    "10 - Pop2K": "pop2k",
+    "11 - The 10s Spot": "the10sspot",
+    "12 - The Kelly Clarkson Connection": "kellyclarksonconnection",
+    "13 - Pitbull's Globalization": "pitbullsglobalization",
+    "14 - Life With John Mayer": "lifewithjohnmayer",
+    "15 - Yacht Rock Radio": "yachtrockradio",
+    "16 - The Blend": "theblend",
+    "17 - The Coffee House": "thecoffeehouse",
+    "18 - The Beatles Channel": "thebeatleschannel",
+    "19 - Bob Marley's Tuff Gong Radio": "bobmarleystuffgong",
+    "20 - E Street Radio": "estreetradio",
+    "21 - Little Steven's Underground Garage": "undergroundgarage",
+    "22 - Pearl Jam Radio": "pearljamradio",
+    "23 - Grateful Dead Radio": "gratefuldead",
+    "24 - Radio Margaritaville": "radiomargaritaville",
+    "25 - Classic Rewind": "classicrewind",
+    "26 - Classic Vinyl": "classicvinyl",
+    "27 - The Bridge": "thebridge",
+    "28 - The Spectrum": "thespectrum",
+    "29 - Phish Radio": "phishradio",
+    "30 - Dave Matthews Band Radio": "davematthewsbandradio",
+    "31 - Tom Petty Radio": "tompettyradio",
+    "32 - U2 X-Radio": "u2xradio",
+    "33 - 1st Wave": "1stwave",
+    "34 - Lithium": "lithium",
+    "35 - SiriusXMU": "siriusxmu",
+    "36 - Alt Nation": "altnation",
+    "37 - Octane": "octane",
+    "38 - Ozzy's Boneyard": "ozzysboneyard",
+    "39 - Hair Nation": "hairnation",
+    "40 - Liquid Metal": "liquidmetal",
+    "41 - SiriusXM Turbo": "siriusxmturbo",
+    "42 - SiriusXM 42": "siriusxm42",
+    "43 - Rock The Bells Radio": "rockthebellsradio",
+    "44 - Hip-Hop Nation": "hiphopnation",
+    "45 - Shade 45": "shade45",
+    "46 - The Heat": "theheat",
+    "47 - Heart & Soul": "heartsoul",
+    "48 - The Flow": "theflow",
+    "49 - Flex 2K": "flex2k",
+    "50 - SiriusXM Fly": "siriusxmfly",
+    "51 - The Groove": "thegroove",
+    "52 - BPM": "bpm",
+    "53 - Diplo's Revolution": "diplosrevolution",
+    "54 - Studio 54": "studio54radio",
+    "55 - SiriusXM Chill": "siriusxmchill",
+    "56 - The Highway": "thehighway",
+    "57 - Y2Kountry": "y2kountry",
+    "58 - Prime Country": "primecountry",
+    "59 - No Shoes Radio": "noshoesradio",
+    "60 - Carrie Country": "carriescountry",
+    "61 - Willie's Roadhouse": "williesroadhouse",
+    "62 - Outlaw Country": "outlawcountry",
+    "63 - Chris Stapleton Radio": "chrisstapletonradio",
+    "64 - Kirk Franklin's Praise": "kirkfranklinspraise",
+    "65 - The Message": "themessage",
+    "66 - Watercolors": "watercolors",
+    "67 - Real Jazz": "realjazz",
+    "68 - Spa": "spa",
+    "69 - On Broadway": "onbroadway",
+    "70 - Siriusly Sinatra": "siriuslysinatra",
+    "71 - 40s Junction": "40sjunction",
+    "72 - 50s Gold": "50sgold",
+    "73 - 60s Gold": "60sgold",
+    "74 - Smokey's Soul Town": "smokeyssoultown",
+    "75 - BB King's Bluesville": "bbkingsbluesville",
+    "76 - Elvis Radio": "elvisradio",
+    "77 - Bluegrass Junction": "bluegrassjunction",
+    "78 - Symphony Hall": "symphonyhall",
+    "79 - Bily Joel Channel": "billyjoelchannel",
+    "105 - SiriusXM 105": "siriusxm105",
+    "133 - Disney Hits": "disneyhits",
+    "134 - Kids Place": "kidsplace",
+    "135 - Kidz Bop Radio": "kidzbopradio",
+    "136 - Moonbug Radio": "moonbugradio",
 }

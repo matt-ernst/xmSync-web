@@ -85,7 +85,7 @@ body {
     background: var(--tertiary-color);
     border-radius: 20px;
     padding: 2rem;
-    width: 600px;
+    width: 500px;
     margin: 0 auto;
     box-shadow: 2px 4px 16px rgba(0, 0, 0, 0.1);
 }
@@ -113,6 +113,7 @@ body {
 
 #songInfo {
     color: var(--text-color);
+    text-align: center;
 }
 
 #welcome-xmsync {
@@ -128,16 +129,53 @@ body {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    gap: .5rem;
+    margin-top: 1.5rem;
 }
 
-#stationDropdown,
+
+#stationDropdown {
+    width: 220px;
+    padding: 0.7rem 1.2rem;
+    border-radius: 8px;
+    border: 2px solid var(--primary-color);
+    background: #fff;
+    color: #222;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+    box-shadow: 0 2px 8px rgba(30, 217, 170, 0.08);
+}
+
+#stationDropdown:focus {
+    border-color: var(--secondary-color);
+    outline: none;
+}
+
 #stationInput,
 input[type="submit"] {
-    padding: 0.5rem;
-    border-radius: 6px;
+    width: 120px;
+    padding: 0.7rem 1.2rem;
+    border-radius: 8px;
     border: none;
-    margin-bottom: 0.5rem;
+    background: var(--primary-color);
+    color: var(--text-color);
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(30, 217, 170, 0.12);
+    text-align: center;
+    display: block;
+    margin: 0 auto;
 }
+
+input[type="submit"]:hover,
+input[type="submit"]:focus {
+    background: var(--secondary-color);
+    color: #fff;
+    outline: none;
+}
+
 
 /* ====== Responsive Styles ====== */
 @media (max-width: 700px) {
@@ -164,5 +202,16 @@ input[type="submit"] {
         float: none;
         display: block;
         text-align: left;
+    }
+}
+
+@media (max-width: 700px) {
+    #stationDropdown,
+    input[type="submit"] {
+        width: 100%;
+        font-size: 1.1rem;
+    }
+    .station-section {
+        align-items: stretch;
     }
 }
