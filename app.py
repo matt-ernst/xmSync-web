@@ -185,6 +185,7 @@ def getSongLink(station_id):
             return spotify_uri
     
         else:
+            print("No playable song found for this station.")
             return None
     
     except:

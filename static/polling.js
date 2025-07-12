@@ -30,7 +30,12 @@ window.addEventListener('DOMContentLoaded', function () {
  * @returns {void}
  */
 function pollStation() {
-    if (!stationId) return;
+    if (!stationId){
+        console.warn('No station selected for polling.');
+        return;
+    }
+
+    console.log('Polling station:', stationId);
 
     fetch('/poll_station', {
         method: 'POST',

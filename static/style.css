@@ -32,7 +32,6 @@ body {
 
 .header a,
 .header span {
-    float: none;               /* Remove float */
     color: var(--text-color);
     text-align: center;
     padding: 12px;
@@ -40,7 +39,7 @@ body {
     font-size: 18px;
     line-height: 25px;
     border-radius: 4px;
-    margin: 0 10px;            /* Space between links */
+    margin: 0 10px;
 }
 
 .header a.logo {
@@ -77,7 +76,7 @@ body {
 
 /* ====== Player Styles ====== */
 .center-container {
-    display: flex;
+    display: block;
     justify-content: center;
 }
 
@@ -85,21 +84,21 @@ body {
     background: var(--tertiary-color);
     border-radius: 20px;
     padding: 2rem;
-    width: 500px;
+    width: 300px;
     margin: 0 auto;
     box-shadow: 2px 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .player-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: block;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: stretch;
 }
 
 .song-section {
-    display: flex;
+    display: block;
     align-items: center;
-    gap: 1rem;
     flex: 1;
 }
 
@@ -125,13 +124,14 @@ body {
 }
 
 .station-section {
-    flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
-    gap: .5rem;
+    align-items: center;
+    gap: 0.5rem;
     margin-top: 1.5rem;
+    flex: 1;
 }
+
 
 
 #stationDropdown {
@@ -144,6 +144,7 @@ body {
     font-size: 1rem;
     transition: border-color 0.2s;
     box-shadow: 0 2px 8px rgba(30, 217, 170, 0.08);
+    align-items: center;
 }
 
 #stationDropdown:focus {
@@ -183,16 +184,6 @@ input[type="submit"]:focus {
         width: 95vw;
         padding: 1rem;
     }
-
-    .player-content {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 2rem;
-    }
-
-    .station-section {
-        align-items: flex-start;
-    }
 }
 
 @media (max-width: 500px) {
@@ -202,16 +193,5 @@ input[type="submit"]:focus {
         float: none;
         display: block;
         text-align: left;
-    }
-}
-
-@media (max-width: 700px) {
-    #stationDropdown,
-    input[type="submit"] {
-        width: 100%;
-        font-size: 1.1rem;
-    }
-    .station-section {
-        align-items: stretch;
     }
 }
