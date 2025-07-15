@@ -48,7 +48,7 @@ Due to [Spotify's April 15th, 2025 API limitations](https://developer.spotify.co
 * Log in with your Spotify account
 * Create a new application
 * Note down your Client ID and Client Secret
-* `https://127.0.0.1:8888/callback` can be your Redirect URI
+* `http://127.0.0.1:8888/callback/spotify` can be your Redirect URI
 * Users of your application can be added here (max of 25), the owner is automatically given permission. 
 
 ## 3.) Supply Credentials in Environment File
@@ -58,7 +58,7 @@ Due to [Spotify's April 15th, 2025 API limitations](https://developer.spotify.co
   FLASK_SECRET=your_flask_secret_key
   SPOTIFY_CLIENT_ID=your_spotify_client_id
   SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
-  REDIRECT_URI=https://127.0.0.1:8888/callback
+  REDIRECT_URI_SPOTIFY = http://127.0.0.1:8888/callback/spotify  
   ```
 
 ## 4.) Install Project Dependencies
