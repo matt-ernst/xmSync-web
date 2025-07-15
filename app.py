@@ -2,13 +2,13 @@ import os
 import uuid
 import base64
 import urllib.parse
+import requests
+import spotipy
 
 from dotenv import load_dotenv
 from stations import stations
 from flask_cors import CORS
-import requests
 from flask import Flask, redirect, render_template, request, session, jsonify
-import spotipy
 
 app = Flask(__name__)
 CORS(app)
@@ -16,57 +16,75 @@ CORS(app)
 app.secret_key = os.environ.get("FLASK_SECRET")
 SPOTIFY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
 SPOTIFY_CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
-REDIRECT_URI = os.environ.get("REDIRECT_URI")
+REDIRECT_URI_SPOTIFY = os.environ.get("REDIRECT_URI_SPOTIFY")
 
-def format_display_name(key):
-    return key.replace('_', ' ').title()
+# /////////////////////////////////////////////////////
+# AUTH ROUTES: LOGIN & CALLBACK (Spotify, expandable)
+# /////////////////////////////////////////////////////
+@app.route("/login/<provider>")
+def login(provider):
+    if provider == "spotify":
+        print("Spotify Login Initiated")
+        return spotify_login()
+    
+    #if provider == "amazon":
+    #    print("Amazon Login Initiated")
+    #    return amazon_login()
 
-station_options = [
-    {"display": key, "value": value}
-    for key, value in stations.items()
-]
+    #if provider == "apple"
+    #    print("Apple Login Initiated")
+    #    return apple_login()
 
-@app.route("/")
-def index():
-    display_name = session.get('display_name')
+    else:
+        return "Unknown provider", 400
+    
+@app.route("/callback/<provider>")
+def callback(provider):
+    if provider == "spotify":
+        print("Spotify Callback Initiated")
+        return handle_spotify_callback()
+    
+    #if provider == "amazon":
+    #    print("Amazon Callback Initiated")
+    #    return amazon_callback()
 
-    return render_template("index.html", display_name=display_name)
+    #if provider == "apple"
+    #    print("Apple Callback Initiated")
+    #    return apple_callback()
 
-@app.route("/dashboard")
-def dashboard():
-    display_name = session.get('display_name')
-    return render_template("dashboard.html", display_name=display_name, station_options=station_options)
-
-@app.route("/login")
-def login():
+    else:
+        return "Unknown provider", 400
+    
+# /////////////////////////////////////////////////////
+# SPOTIFY AUTHENTICATION HANDLERS
+# /////////////////////////////////////////////////////
+def spotify_login():
     authentication_request_params = {
         'response_type': 'code',
         'client_id': SPOTIFY_CLIENT_ID,
-        'redirect_uri': REDIRECT_URI,
+        'redirect_uri': REDIRECT_URI_SPOTIFY,
         'scope': 'user-modify-playback-state',
         'state': str(uuid.uuid4()),
         'show_dialog': 'true'
     }
     
     auth_url = "https://accounts.spotify.com/authorize?" + urllib.parse.urlencode(authentication_request_params)
-
     return redirect(auth_url)
 
-@app.route("/callback")
-def callback():
+def handle_spotify_callback():
     code = request.args.get('code')
     if not code:
         return "No code provided", 400
 
-    # Exchange code for access token
+    # Exchange the code for an access token
     token_url = "https://accounts.spotify.com/api/token"
     client_creds = f"{SPOTIFY_CLIENT_ID}:{SPOTIFY_CLIENT_SECRET}"
     encoded_creds = base64.b64encode(client_creds.encode()).decode()
-    
+
     payload = {
         'grant_type': 'authorization_code',
         'code': code,
-        'redirect_uri': REDIRECT_URI,
+        'redirect_uri': REDIRECT_URI_SPOTIFY,  # This should match the Spotify app redirect URI
     }
 
     headers = {
@@ -77,29 +95,41 @@ def callback():
     response = requests.post(token_url, data=payload, headers=headers)
     if response.status_code != 200:
         return f"Failed to get access token: {response.text}", 400
+
     token_info = response.json()
     access_token = token_info.get('access_token')
-
-    # Store access token in session for later API calls
     session['access_token'] = access_token
 
-    # Fetch user profile
+    # Get user profile info from Spotify
     user_profile_url = "https://api.spotify.com/v1/me"
     headers = {'Authorization': f'Bearer {access_token}'}
     user_response = requests.get(user_profile_url, headers=headers)
 
     if user_response.status_code != 200:
         return "Failed to get user info", 400
-    
+
     user_info = user_response.json()
     display_name = user_info.get('display_name', 'Spotify User')
-    spotify_session = spotipy.Spotify(auth_manager=spotipy.SpotifyOAuth(client_id=SPOTIFY_CLIENT_ID, client_secret=SPOTIFY_CLIENT_SECRET, redirect_uri=REDIRECT_URI))
-    print(spotify_session)
-
-    # Store display name in session
     session['display_name'] = display_name
 
     return redirect("/")
+
+# /////////////////////////////////////////////////////
+# ROUTES: MAIN NAVIGATION
+# /////////////////////////////////////////////////////
+@app.route("/")
+def index():
+    display_name = session.get('display_name')
+    return render_template("index.html", display_name=display_name)
+
+@app.route("/dashboard")
+def dashboard():
+    display_name = session.get('display_name')
+    station_options = [
+        {"display": key, "value": value}
+        for key, value in stations.items()
+    ]
+    return render_template("dashboard.html", display_name=display_name, station_options=station_options)
 
 @app.route("/logout")
 def logout():
@@ -121,6 +151,9 @@ def home():
     display_name = session.get('display_name')
     return render_template("index.html", display_name=display_name)
 
+# /////////////////////////////////////////////////////
+# XMPLAYLIST API HANDLER
+# /////////////////////////////////////////////////////
 @app.route('/poll_station', methods=['POST'])
 def poll_station():
     print("Polling station for new song...")
@@ -152,12 +185,6 @@ def poll_station():
             print(f'Error adding to queue: {e}')
 
     return jsonify({'song': song_info, 'new_song_added': new_song_added})
-
-def get_spotify_client():
-    access_token = session.get('access_token')
-    if not access_token:
-        return None
-    return spotipy.Spotify(auth=access_token)
 
 def getSongLink(station_id):
     try:
@@ -195,5 +222,8 @@ def getSongLink(station_id):
     return spotify_uri
 
 
+# /////////////////////////////////////////////////////
+# ENTRY POINT
+# /////////////////////////////////////////////////////
 if __name__ == "__main__":
     app.run(port=8888, debug=True)

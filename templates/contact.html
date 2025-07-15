@@ -19,7 +19,7 @@
             <a href="{{ url_for('logout') }}">Logout</a>
             <span id="welcomeMessage">Welcome, {{ display_name|e }}!</span>
             {% else %}
-            <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('login', provider='spotify') }}">Login</a>
             {% endif %}
         </div>
     </div>
