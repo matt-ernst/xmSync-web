@@ -5,118 +5,65 @@ import urllib.parse
 import requests
 import spotipy
 
+from providers.spotify_provider import SpotifyProvider
+#from providers.amazon_provider import AmazonProvider
+#from providers.apple_provider import AppleProvider
+
 from dotenv import load_dotenv
 from stations import stations
 from flask_cors import CORS
 from flask import Flask, redirect, render_template, request, session, jsonify
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("FLASK_SECRET")
 CORS(app)
 
-app.secret_key = os.environ.get("FLASK_SECRET")
-SPOTIFY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
-SPOTIFY_CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
-REDIRECT_URI_SPOTIFY = os.environ.get("REDIRECT_URI_SPOTIFY")
+def get_provider_instance(provider):
+    if provider == "spotify":
+        return SpotifyProvider(
+            client_id=os.environ["SPOTIFY_CLIENT_ID"],
+            client_secret=os.environ["SPOTIFY_CLIENT_SECRET"],
+            redirect_uri=os.environ["REDIRECT_URI_SPOTIFY"],
+            session=session
+        )
+    
+    if provider == "amazon":
+        return AmazonProvider(
+            client_id=os.environ["AMAZON_CLIENT_ID"],
+            client_secret=os.environ["AMAZON_CLIENT_SECRET"],
+            redirect_uri=os.environ["REDIRECT_URI_AMAZON"],
+            session=session
+        )
+    
+    if provider == "apple":
+        return AppleProvider(
+            client_id=os.environ["APPLE_CLIENT_ID"],
+            client_secret=os.environ["APPLE_CLIENT_SECRET"],
+            redirect_uri=os.environ["REDIRECT_URI_APPLE"],
+            session=session
+        )
+    
+    raise Exception(f"Unknown provider: {provider}")
 
-# /////////////////////////////////////////////////////
-# AUTH ROUTES: LOGIN & CALLBACK (Spotify, expandable)
-# /////////////////////////////////////////////////////
 @app.route("/login/<provider>")
 def login(provider):
-    if provider == "spotify":
-        print("Spotify Login Initiated")
-        return spotify_login()
-    
-    #if provider == "amazon":
-    #    print("Amazon Login Initiated")
-    #    return amazon_login()
+    provider_instance = get_provider_instance(provider)
+    login_url = provider_instance.authenticate()
+    return redirect(login_url)
 
-    #if provider == "apple"
-    #    print("Apple Login Initiated")
-    #    return apple_login()
-
-    else:
-        return "Unknown provider", 400
-    
 @app.route("/callback/<provider>")
 def callback(provider):
-    if provider == "spotify":
-        print("Spotify Callback Initiated")
-        return handle_spotify_callback()
-    
-    #if provider == "amazon":
-    #    print("Amazon Callback Initiated")
-    #    return amazon_callback()
-
-    #if provider == "apple"
-    #    print("Apple Callback Initiated")
-    #    return apple_callback()
-
-    else:
-        return "Unknown provider", 400
-    
-# /////////////////////////////////////////////////////
-# SPOTIFY AUTHENTICATION HANDLERS
-# /////////////////////////////////////////////////////
-def spotify_login():
-    authentication_request_params = {
-        'response_type': 'code',
-        'client_id': SPOTIFY_CLIENT_ID,
-        'redirect_uri': REDIRECT_URI_SPOTIFY,
-        'scope': 'user-modify-playback-state',
-        'state': str(uuid.uuid4()),
-        'show_dialog': 'true'
-    }
-    
-    auth_url = "https://accounts.spotify.com/authorize?" + urllib.parse.urlencode(authentication_request_params)
-    return redirect(auth_url)
-
-def handle_spotify_callback():
+    provider_instance = get_provider_instance(provider)
     code = request.args.get('code')
-    if not code:
-        return "No code provided", 400
 
-    # Exchange the code for an access token
-    token_url = "https://accounts.spotify.com/api/token"
-    client_creds = f"{SPOTIFY_CLIENT_ID}:{SPOTIFY_CLIENT_SECRET}"
-    encoded_creds = base64.b64encode(client_creds.encode()).decode()
+    if provider_instance.authenticate(code):
+        session['provider'] = provider
+        display_name = provider_instance.get_name()
+        session['display_name'] = display_name
+        return redirect("/")
+    else:
+        return "Authentication failed", 400
 
-    payload = {
-        'grant_type': 'authorization_code',
-        'code': code,
-        'redirect_uri': REDIRECT_URI_SPOTIFY,  # This should match the Spotify app redirect URI
-    }
-
-    headers = {
-        'Authorization': f'Basic {encoded_creds}',
-        'Content-Type': 'application/x-www-form-urlencoded'
-    }
-
-    response = requests.post(token_url, data=payload, headers=headers)
-    if response.status_code != 200:
-        return f"Failed to get access token: {response.text}", 400
-
-    token_info = response.json()
-    access_token = token_info.get('access_token')
-    session['access_token'] = access_token
-
-    # Get user profile info from Spotify
-    user_profile_url = "https://api.spotify.com/v1/me"
-    headers = {'Authorization': f'Bearer {access_token}'}
-    user_response = requests.get(user_profile_url, headers=headers)
-
-    if user_response.status_code != 200:
-        return "Failed to get user info", 400
-
-    user_info = user_response.json()
-    display_name = user_info.get('display_name', 'Spotify User')
-    session['display_name'] = display_name
-
-    return redirect("/")
-
-# /////////////////////////////////////////////////////
-# ROUTES: MAIN NAVIGATION
-# /////////////////////////////////////////////////////
 @app.route("/")
 def index():
     display_name = session.get('display_name')
@@ -151,9 +98,6 @@ def home():
     display_name = session.get('display_name')
     return render_template("index.html", display_name=display_name)
 
-# /////////////////////////////////////////////////////
-# XMPLAYLIST API HANDLER
-# /////////////////////////////////////////////////////
 @app.route('/poll_station', methods=['POST'])
 def poll_station():
     print("Polling station for new song...")
@@ -221,9 +165,5 @@ def getSongLink(station_id):
 
     return spotify_uri
 
-
-# /////////////////////////////////////////////////////
-# ENTRY POINT
-# /////////////////////////////////////////////////////
 if __name__ == "__main__":
     app.run(port=8888, debug=True)

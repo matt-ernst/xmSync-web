@@ -42,6 +42,7 @@ function pollStation() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ station_id: stationId })
     })
+
     .then(response => response.json())
     .then(data => {
         const songInfoDiv = document.getElementById('songInfo');
