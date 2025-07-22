@@ -113,8 +113,9 @@ def poll_station():
 
     sp = spotipy.Spotify(auth=access_token)
     song_info = getSongLink(station_id)
+
     if not song_info:
-        return jsonify({'error': 'No song found'}), 404
+        return jsonify({'error': song_info}), 404
 
     last_uri = session.get('last_uri')
     new_song_added = False
@@ -160,11 +161,10 @@ def getSongLink(station_id):
     
         else:
             print("No playable song found for this station.")
-            return None
+            return jsonify({'error': 'No playable song found for this station.'})
     
     except Exception as e:
-        print(f"No playable song found in API response{e}")
-        return None
+        return jsonify({'error': 'An error occurred while fetching the song.'})
 
 if __name__ == "__main__":
     app.run(port=8888, debug=True)
