@@ -103,7 +103,7 @@ def poll_station():
     print("Polling station for new song...")
     data = request.get_json()
     station_id = data.get('station_id')
-    
+
     if not station_id:
         return jsonify({'error': 'No station_id provided'}), 400
 
@@ -131,10 +131,13 @@ def poll_station():
 
     return jsonify({'song': song_info, 'new_song_added': new_song_added})
 
+
 def getSongLink(station_id):
     try:
         url = "https://xmplaylist.com/api/station/" + station_id
         response = requests.get(url, timeout=5)
+        print(f"Status Code: {response.status_code}")
+        print(f"Raw Response: {response.text[:300]}")
         response.raise_for_status()
         data = response.json()
     
@@ -153,18 +156,15 @@ def getSongLink(station_id):
             }
 
             print(f"Found song: {spotify_uri['Title']} by {spotify_uri['Artist']}")            
-
             return spotify_uri
     
         else:
             print("No playable song found for this station.")
             return None
     
-    except:
-        print("An error occurred while fetching the song.")
+    except Exception as e:
+        print(f"No playable song found in API response{e}")
         return None
-
-    return spotify_uri
 
 if __name__ == "__main__":
     app.run(port=8888, debug=True)
