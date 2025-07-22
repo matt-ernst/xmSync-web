@@ -37,7 +37,7 @@ function pollStation() {
 
     console.log('Polling station:', stationId);
 
-    fetch('/poll_station', {
+    fetch(`${window.location.origin}/poll_station`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ station_id: stationId })
@@ -52,6 +52,7 @@ function pollStation() {
                 <strong><em>${data.song.Title}</em></strong><br>${data.song.Artist}<br><em>Added to Queue</em>
             `;
         } else {
+            console.log(data)
             songInfoDiv.textContent = 'No Playable Song Found, Try a Different Station';
         }
 

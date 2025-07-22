@@ -103,6 +103,7 @@ def poll_station():
     print("Polling station for new song...")
     data = request.get_json()
     station_id = data.get('station_id')
+    
     if not station_id:
         return jsonify({'error': 'No station_id provided'}), 400
 
