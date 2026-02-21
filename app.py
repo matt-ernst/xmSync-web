@@ -101,7 +101,7 @@ def home():
 @app.route('/poll_station', methods=['POST'])
 def poll_station():
     print("Polling station for new song...")
-    data = request.get_json()
+    data = request.get_json(silent=True) or {}
     station_id = data.get('station_id')
 
     if not station_id:
@@ -115,7 +115,7 @@ def poll_station():
     song_info = getSongLink(station_id)
 
     if not song_info:
-        return jsonify({'error': song_info}), 404
+        return jsonify({'song': None, 'error': 'No playable song found for this station.'}), 200
 
     last_uri = session.get('last_uri')
     new_song_added = False
@@ -129,6 +129,7 @@ def poll_station():
             new_song_added = True
         except Exception as e:
             print(f'Error adding to queue: {e}')
+            return jsonify({'song': song_info, 'new_song_added': False, 'error': 'Failed to add song to queue.'}), 500
 
     return jsonify({'song': song_info, 'new_song_added': new_song_added})
 
@@ -161,10 +162,11 @@ def getSongLink(station_id):
     
         else:
             print("No playable song found for this station.")
-            return jsonify({'error': 'No playable song found for this station.'})
+            return None
     
     except Exception as e:
-        return jsonify({'error': 'An error occurred while fetching the song.'})
+        print(f"Error fetching song for station {station_id}: {e}")
+        return None
 
 if __name__ == "__main__":
     app.run(port=8888, debug=True)

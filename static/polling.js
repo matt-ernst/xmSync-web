@@ -43,7 +43,20 @@ function pollStation() {
         body: JSON.stringify({ station_id: stationId })
     })
 
-    .then(response => response.json())
+    .then(async response => {
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Polling request failed (${response.status}): ${errorText.slice(0, 200)}`);
+        }
+
+        const contentType = response.headers.get('content-type') || '';
+        if (!contentType.includes('application/json')) {
+            const responseText = await response.text();
+            throw new Error(`Expected JSON response, received: ${responseText.slice(0, 200)}`);
+        }
+
+        return response.json();
+    })
     .then(data => {
         const songInfoDiv = document.getElementById('songInfo');
         if (data.song) {
