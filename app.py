@@ -137,9 +137,14 @@ def poll_station():
 def getSongLink(station_id):
     try:
         url = "https://xmplaylist.com/api/station/" + station_id
-        response = requests.get(url, timeout=5)
-        print(f"Status Code: {response.status_code}")
-        print(f"Raw Response: {response.text[:300]}")
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Accept": "application/json, text/plain, */*",
+            "Referer": "https://xmplaylist.com/",
+        }
+        response = requests.get(url, headers=headers, timeout=10)
+        print(f"xmplaylist status: {response.status_code}, content-type: {response.headers.get('content-type')}")
+        print(f"xmplaylist body (first 300 chars): {response.text[:300]}")
         response.raise_for_status()
         data = response.json()
     
