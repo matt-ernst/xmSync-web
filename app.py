@@ -3,6 +3,7 @@ import uuid
 import base64
 import urllib.parse
 import requests
+import cloudscraper
 import spotipy
 
 from providers.spotify_provider import SpotifyProvider
@@ -137,12 +138,10 @@ def poll_station():
 def getSongLink(station_id):
     try:
         url = "https://xmplaylist.com/api/station/" + station_id
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-            "Accept": "application/json, text/plain, */*",
-            "Referer": "https://xmplaylist.com/",
-        }
-        response = requests.get(url, headers=headers, timeout=10)
+        scraper = cloudscraper.create_scraper(
+            browser={"browser": "chrome", "platform": "windows", "mobile": False}
+        )
+        response = scraper.get(url, timeout=15)
         print(f"xmplaylist status: {response.status_code}, content-type: {response.headers.get('content-type')}")
         print(f"xmplaylist body (first 300 chars): {response.text[:300]}")
         response.raise_for_status()
