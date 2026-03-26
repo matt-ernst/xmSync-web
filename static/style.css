@@ -306,6 +306,177 @@ input[type="submit"]:active {
     box-shadow: 0 2px 8px rgba(30, 217, 170, 0.2);
 }
 
+/* ====== Auth / Provider Selection ====== */
+.auth-card {
+    background: var(--surface);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    padding: 2.75rem 2.5rem;
+    width: 100%;
+    max-width: 460px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+.auth-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text);
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.auth-subtitle {
+    color: var(--muted);
+    font-size: 0.9rem;
+    text-align: center;
+    margin-bottom: 1.75rem;
+    line-height: 1.55;
+}
+
+.provider-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.provider-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.9rem 1.25rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text);
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s, box-shadow 0.15s;
+}
+
+.provider-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+.provider-btn:active {
+    transform: translateY(0);
+}
+
+.provider-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.provider-name {
+    flex: 1;
+}
+
+.provider-arrow {
+    width: 18px;
+    height: 18px;
+    color: var(--muted);
+    flex-shrink: 0;
+}
+
+/* Spotify — green accent */
+.provider-spotify {
+    border-color: rgba(29, 185, 84, 0.35);
+    color: #1DB954;
+}
+.provider-spotify:hover {
+    background: rgba(29, 185, 84, 0.1);
+    border-color: rgba(29, 185, 84, 0.6);
+}
+
+/* Apple Music — red accent */
+.provider-apple {
+    border-color: rgba(252, 60, 68, 0.35);
+    color: #FC3C44;
+}
+.provider-apple:hover {
+    background: rgba(252, 60, 68, 0.1);
+    border-color: rgba(252, 60, 68, 0.6);
+}
+
+/* Amazon Music — blue accent */
+.provider-amazon {
+    border-color: rgba(0, 168, 225, 0.35);
+    color: #00A8E1;
+}
+.provider-amazon:hover {
+    background: rgba(0, 168, 225, 0.1);
+    border-color: rgba(0, 168, 225, 0.6);
+}
+
+.auth-note {
+    margin-top: 1.5rem;
+    color: var(--muted);
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.auth-note a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.auth-note a:hover {
+    text-decoration: underline;
+}
+
+/* Apple auth handoff page */
+.provider-icon-large {
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem;
+}
+
+.provider-apple-bg {
+    background: rgba(252, 60, 68, 0.12);
+    color: #FC3C44;
+}
+
+.auth-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 1.25rem auto 0;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.auth-back-link {
+    display: block;
+    margin-top: 1.5rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+    text-decoration: none;
+    text-align: center;
+    transition: color 0.15s;
+}
+
+.auth-back-link:hover {
+    color: var(--text);
+}
+
 /* ====== Responsive ====== */
 @media (max-width: 700px) {
     .header {

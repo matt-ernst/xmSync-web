@@ -1,14 +1,9 @@
 import os
-import uuid
-import base64
-import urllib.parse
-import requests
 import cloudscraper
-import spotipy
 
 from providers.spotify_provider import SpotifyProvider
-#from providers.amazon_provider import AmazonProvider
-#from providers.apple_provider import AppleProvider
+from providers.amazon_provider import AmazonProvider
+from providers.apple_provider import AppleProvider
 
 from dotenv import load_dotenv
 from stations import stations
@@ -29,7 +24,7 @@ def get_provider_instance(provider):
             redirect_uri=os.environ["REDIRECT_URI_SPOTIFY"],
             session=session
         )
-    
+
     if provider == "amazon":
         return AmazonProvider(
             client_id=os.environ["AMAZON_CLIENT_ID"],
@@ -37,32 +32,66 @@ def get_provider_instance(provider):
             redirect_uri=os.environ["REDIRECT_URI_AMAZON"],
             session=session
         )
-    
+
     if provider == "apple":
         return AppleProvider(
-            client_id=os.environ["APPLE_CLIENT_ID"],
-            client_secret=os.environ["APPLE_CLIENT_SECRET"],
-            redirect_uri=os.environ["REDIRECT_URI_APPLE"],
+            team_id=os.environ["APPLE_TEAM_ID"],
+            key_id=os.environ["APPLE_KEY_ID"],
+            private_key=os.environ["APPLE_PRIVATE_KEY"],
+            redirect_uri=os.environ.get("REDIRECT_URI_APPLE", ""),
             session=session
         )
-    
-    raise Exception(f"Unknown provider: {provider}")
+
+    raise ValueError(f"Unknown provider: {provider}")
+
+@app.route("/auth")
+def auth():
+    return render_template("auth.html")
 
 @app.route("/login/<provider>")
 def login(provider):
+    if provider not in ("spotify", "apple", "amazon"):
+        return "Unknown provider", 400
+
     provider_instance = get_provider_instance(provider)
+
+    # Apple Music uses MusicKit JS — render a page instead of redirecting
+    if provider == "apple":
+        developer_token = provider_instance.authenticate()
+        return render_template("apple_auth.html", developer_token=developer_token)
+
     login_url = provider_instance.authenticate()
     return redirect(login_url)
 
+@app.route("/callback/apple", methods=["POST"])
+def apple_callback():
+    """Receives the Music User Token POSTed by MusicKit JS after user auth."""
+    data = request.get_json(silent=True) or {}
+    music_user_token = data.get("music_user_token")
+    display_name = data.get("display_name") or "Apple Music User"
+
+    if not music_user_token:
+        return jsonify({"error": "No music_user_token provided"}), 400
+
+    provider_instance = get_provider_instance("apple")
+    provider_instance.authenticate(music_user_token)
+    session["provider"] = "apple"
+    session["display_name"] = display_name
+    session["apple_display_name"] = display_name
+    return jsonify({"success": True})
+
 @app.route("/callback/<provider>")
 def callback(provider):
+    if provider not in ("spotify", "amazon"):
+        return "Unknown provider", 400
+
     provider_instance = get_provider_instance(provider)
-    code = request.args.get('code')
+    code = request.args.get("code")
 
     if provider_instance.authenticate(code):
-        session['provider'] = provider
+        session["provider"] = provider
         display_name = provider_instance.get_name()
-        session['display_name'] = display_name
+        session["display_name"] = display_name
         return redirect("/")
     else:
         return "Authentication failed", 400
@@ -114,8 +143,8 @@ def poll_station():
     if not access_token:
         return jsonify({'error': 'User not authenticated'}), 401
 
-    sp = spotipy.Spotify(auth=access_token)
-    song_info = getSongLink(station_id)
+    provider_name = session.get('provider', 'spotify')
+    song_info = getSongInfo(station_id)
 
     if not song_info:
         return jsonify({'song': None, 'error': 'No playable song found for this station.'}), 200
@@ -125,19 +154,46 @@ def poll_station():
 
     if song_info['URI'] != last_uri:
         try:
-            sp.add_to_queue(song_info['URI'])
+            provider_instance = get_provider_instance(provider_name)
+
+            if provider_name == 'spotify':
+                provider_instance.add_to_queue(song_info['URI'])
+
+            elif provider_name == 'apple':
+                apple_id = provider_instance.find_track(
+                    song_info['Title'], song_info['Artist']
+                )
+                if apple_id:
+                    provider_instance.add_to_queue(apple_id)
+                    song_info['AppleID'] = apple_id
+                else:
+                    return jsonify({
+                        'song': song_info,
+                        'new_song_added': False,
+                        'error': 'Track not found on Apple Music.'
+                    }), 200
+
+            elif provider_name == 'amazon':
+                # Amazon Music does not expose a public queue API.
+                # Return song info so the frontend can display what's playing.
+                return jsonify({'song': song_info, 'new_song_added': False,
+                                'error': 'Queue management is not supported for Amazon Music.'}), 200
+
             print(f"Added song to queue: {song_info['Title']} by {song_info['Artist']}")
             session['last_uri'] = song_info['URI']
-            print(session['last_uri'])
             new_song_added = True
+
         except Exception as e:
             print(f'Error adding to queue: {e}')
-            return jsonify({'song': song_info, 'new_song_added': False, 'error': 'Failed to add song to queue.'}), 500
+            return jsonify({'song': song_info, 'new_song_added': False,
+                            'error': 'Failed to add song to queue.'}), 500
 
     return jsonify({'song': song_info, 'new_song_added': new_song_added})
 
 
-def getSongLink(station_id):
+def getSongInfo(station_id):
+    """Fetch the current track from xmplaylist.com for a given station ID.
+    Returns a dict with URI (Spotify), Title, Artist, and Image, or None."""
     try:
         url = "https://xmplaylist.com/api/station/" + station_id
         scraper = cloudscraper.create_scraper(
@@ -148,31 +204,31 @@ def getSongLink(station_id):
         print(f"xmplaylist body (first 300 chars): {response.text[:300]}")
         response.raise_for_status()
         data = response.json()
-    
-        #Validates That There is a Playable Song
-        if (data and 'results' in data and data['results'] and 'spotify' in data['results'][0] and 'track' in data['results'][0]):
-            spotify_uri = {
-                'URI': "spotify:track:" + data['results'][0]['spotify']['id'],
-                'Title': data['results'][0]['track']['title'],
-                'Artist': data['results'][0]['track']['artists'][0],
-                'Image': data['results'][0]['spotify']['albumImageLarge']
-            }
 
-            icon = {
-                'src': spotify_uri['Image'],
-                'placement': 'appLogoOverride'
+        if (data and 'results' in data and data['results']
+                and 'spotify' in data['results'][0]
+                and 'track' in data['results'][0]):
+            result = data['results'][0]
+            song_info = {
+                'URI': "spotify:track:" + result['spotify']['id'],
+                'Title': result['track']['title'],
+                'Artist': result['track']['artists'][0],
+                'Image': result['spotify']['albumImageLarge'],
             }
+            print(f"Found song: {song_info['Title']} by {song_info['Artist']}")
+            return song_info
 
-            print(f"Found song: {spotify_uri['Title']} by {spotify_uri['Artist']}")            
-            return spotify_uri
-    
-        else:
-            print("No playable song found for this station.")
-            return None
-    
+        print("No playable song found for this station.")
+        return None
+
     except Exception as e:
         print(f"Error fetching song for station {station_id}: {e}")
         return None
+
+
+# Keep old name as an alias for backwards compatibility
+def getSongLink(station_id):
+    return getSongInfo(station_id)
 
 if __name__ == "__main__":
     app.run(port=8888, debug=True)

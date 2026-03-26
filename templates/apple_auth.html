@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <title>xmSync - Apple Music Sign In</title>
+    <script src="https://js-cdn.music.apple.com/musickit/v3/musickit.js" crossorigin></script>
+</head>
+
+<body>
+    <div class="header">
+        <a href="#default" class="logo">xmSync</a>
+        <div class="header-right">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('contact') }}">Contact</a>
+            <a href="{{ url_for('auth') }}">Sign In</a>
+        </div>
+    </div>
+
+    <div class="center-container">
+        <div class="auth-card">
+            <div id="apple-auth-status">
+                <div class="provider-icon-large provider-apple-bg">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48">
+                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                    </svg>
+                </div>
+
+                <h1 class="auth-title" id="auth-heading">Connecting to Apple Music</h1>
+                <p class="auth-subtitle" id="auth-message">Launching Apple Music authorization…</p>
+
+                <div class="auth-spinner" id="auth-spinner" aria-label="Loading"></div>
+
+                <button id="retry-btn" class="provider-btn provider-apple" style="display:none; margin-top: 1.5rem;">
+                    <span class="provider-name">Try Again</span>
+                </button>
+
+                <a href="{{ url_for('auth') }}" class="auth-back-link">← Choose a different provider</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const DEVELOPER_TOKEN = {{ developer_token | tojson }};
+
+        async function initAppleMusic() {
+            try {
+                await MusicKit.configure({
+                    developerToken: DEVELOPER_TOKEN,
+                    app: {
+                        name: 'xmSync',
+                        build: '1.0.0'
+                    }
+                });
+
+                const music = MusicKit.getInstance();
+
+                document.getElementById('auth-message').textContent = 'Please authorize xmSync in the Apple Music dialog…';
+
+                const userToken = await music.authorize();
+
+                document.getElementById('auth-message').textContent = 'Authorization successful! Signing you in…';
+                document.getElementById('auth-spinner').style.display = 'none';
+
+                // Fetch storefont / user info if available
+                let displayName = 'Apple Music User';
+                try {
+                    const resp = await fetch('https://api.music.apple.com/v1/me', {
+                        headers: {
+                            'Authorization': `Bearer ${DEVELOPER_TOKEN}`,
+                            'Music-User-Token': userToken
+                        }
+                    });
+                    if (resp.ok) {
+                        const data = await resp.json();
+                        displayName = data?.attributes?.displayName || displayName;
+                    }
+                } catch (_) { /* display name is optional */ }
+
+                const response = await fetch('/callback/apple', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ music_user_token: userToken, display_name: displayName })
+                });
+
+                if (response.ok) {
+                    window.location.href = '/dashboard';
+                } else {
+                    throw new Error('Server failed to store authorization.');
+                }
+            } catch (err) {
+                console.error('Apple Music auth error:', err);
+                document.getElementById('auth-heading').textContent = 'Authorization Failed';
+                document.getElementById('auth-message').textContent = err.message || 'Could not authorize with Apple Music. Please try again.';
+                document.getElementById('auth-spinner').style.display = 'none';
+                document.getElementById('retry-btn').style.display = 'flex';
+            }
+        }
+
+        document.getElementById('retry-btn').addEventListener('click', () => {
+            document.getElementById('auth-heading').textContent = 'Connecting to Apple Music';
+            document.getElementById('auth-message').textContent = 'Launching Apple Music authorization…';
+            document.getElementById('auth-spinner').style.display = 'block';
+            document.getElementById('retry-btn').style.display = 'none';
+            initAppleMusic();
+        });
+
+        document.addEventListener('musickitloaded', initAppleMusic);
+    </script>
+</body>
+
+</html>

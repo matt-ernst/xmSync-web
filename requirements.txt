@@ -4,3 +4,5 @@ Requests==2.32.4
 cloudscraper==1.2.71
 spotipy==2.25.0
 Flask-Cors==3.0.10
+PyJWT==2.10.1
+cryptography==44.0.2
