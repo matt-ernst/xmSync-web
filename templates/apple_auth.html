@@ -41,8 +41,9 @@
         </div>
     </div>
 
+    <script type="application/json" id="developer-token-data">{{ developer_token | tojson }}</script>
     <script>
-        const DEVELOPER_TOKEN = {{ developer_token | tojson }};
+        const DEVELOPER_TOKEN = JSON.parse(document.getElementById('developer-token-data').textContent);
 
         async function initAppleMusic() {
             try {

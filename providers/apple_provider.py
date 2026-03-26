@@ -1,26 +1,4 @@
 # providers/apple_provider.py
-#
-# Apple Music integration using MusicKit.
-#
-# Required environment variables:
-#   APPLE_TEAM_ID       — Your 10-character Apple Developer Team ID
-#   APPLE_KEY_ID        — The Key ID from your MusicKit identifier
-#   APPLE_PRIVATE_KEY   — Contents of the .p8 private key file (newlines as \n)
-#   REDIRECT_URI_APPLE  — Unused for MusicKit JS flow, kept for consistency
-#
-# Auth flow:
-#   1. Server generates a short-lived developer JWT with _generate_developer_token().
-#   2. The JWT is injected into apple_auth.html, which loads MusicKit JS.
-#   3. MusicKit JS prompts the user and returns a Music User Token.
-#   4. The frontend POSTs that token to /callback/apple (handled in app.py).
-#   5. The server stores the Music User Token in the Flask session.
-#
-# Queue / search:
-#   Apple Music has no REST "add to queue" endpoint — queuing is client-side
-#   via MusicKit JS.  add_to_queue() here adds the track to the user's Library
-#   (the closest server-side equivalent).  For real-time queuing the frontend
-#   should call MusicKit.getInstance().playLater() with the Apple Music ID
-#   returned by find_track().
 
 import time
 import requests
@@ -42,10 +20,6 @@ class AppleProvider(MusicProvider):
         self.redirect_uri = redirect_uri
         self.session = session
 
-    # ------------------------------------------------------------------
-    # Developer token (server-side JWT, valid up to 6 months)
-    # ------------------------------------------------------------------
-
     def _generate_developer_token(self) -> str:
         now = int(time.time())
         payload = {
@@ -59,10 +33,6 @@ class AppleProvider(MusicProvider):
             algorithm="ES256",
             headers={"kid": self.key_id},
         )
-
-    # ------------------------------------------------------------------
-    # MusicProvider interface
-    # ------------------------------------------------------------------
 
     def authenticate(self, music_user_token: Optional[str] = None):
         """
@@ -106,10 +76,6 @@ class AppleProvider(MusicProvider):
             )
         return {"apple_music_id": apple_music_id, "added": True}
 
-    # ------------------------------------------------------------------
-    # Catalog search helpers
-    # ------------------------------------------------------------------
-
     def find_track(self, title: str, artist: str,
                    storefront: str = "us") -> Optional[str]:
         """
@@ -148,10 +114,6 @@ class AppleProvider(MusicProvider):
             data = response.json().get("data", [])
             return data[0] if data else None
         return None
-
-    # ------------------------------------------------------------------
-    # Internal helpers
-    # ------------------------------------------------------------------
 
     def _auth_headers(self, music_user_token: Optional[str] = None) -> dict:
         headers = {

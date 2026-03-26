@@ -1,23 +1,4 @@
 # providers/amazon_provider.py
-#
-# Amazon Music integration using Login with Amazon (LWA) OAuth 2.0.
-#
-# Required environment variables:
-#   AMAZON_CLIENT_ID      — LWA application Client ID
-#   AMAZON_CLIENT_SECRET  — LWA application Client Secret
-#   REDIRECT_URI_AMAZON   — e.g. http://127.0.0.1:8888/callback/amazon
-#
-# Setup:
-#   1. Sign in to https://developer.amazon.com/loginwithamazon/console/site/lwa/overview.html
-#   2. Create a Security Profile.
-#   3. Note Client ID and Client Secret.
-#   4. Add your redirect URI under "Allowed Return URLs".
-#
-# Note on queue support:
-#   Amazon Music does not publish a public REST API for queue management.
-#   This provider fully implements authentication and user profile retrieval.
-#   add_to_queue() raises NotImplementedError to reflect this limitation;
-#   future Amazon Music API access (if/when available) can be added here.
 
 import uuid
 import urllib.parse
@@ -32,9 +13,6 @@ class AmazonProvider(MusicProvider):
     TOKEN_URL = "https://api.amazon.com/auth/o2/token"
     PROFILE_URL = "https://api.amazon.com/user/profile"
 
-    # Scopes available via LWA:
-    #   profile          — name, user_id, email
-    #   postal_code      — zip/postal code
     SCOPES = "profile"
 
     def __init__(self, client_id: str, client_secret: str,
@@ -44,18 +22,7 @@ class AmazonProvider(MusicProvider):
         self.redirect_uri = redirect_uri
         self.session = session
 
-    # ------------------------------------------------------------------
-    # MusicProvider interface
-    # ------------------------------------------------------------------
-
     def authenticate(self, code: Optional[str] = None):
-        """
-        Without a code: builds and returns the LWA authorization URL to
-        redirect the user to.
-
-        With a code (from the OAuth callback): exchanges it for an access
-        token, stores it in the session, and returns True on success.
-        """
         if code is None:
             state = str(uuid.uuid4())
             self.session["amazon_oauth_state"] = state
@@ -121,10 +88,6 @@ class AmazonProvider(MusicProvider):
             "Amazon Music does not provide a public queue API. "
             "Queue management is not supported for this provider."
         )
-
-    # ------------------------------------------------------------------
-    # Token refresh helper
-    # ------------------------------------------------------------------
 
     def refresh_access_token(self) -> bool:
         """Exchange the stored refresh token for a new access token."""
