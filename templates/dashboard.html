@@ -24,23 +24,17 @@
         </div>
     </div>
 
-    <div id="main">
-        <h1></h1>
-    </div>
-
     <div class="center-container">
-        <section id= "welcome-xmsync">
         <div id="player">
             <div class="player-content">
-                <!-- Top: Song Info -->
+                <!-- Song Info -->
                 <div class="song-section">
                     <div id="songInfo">
-                        <span id="songName"></span><br/>
-                        <span id="artistName"></span>
+                        <p class="idle-message">Select a station to start syncing</p>
                     </div>
                 </div>
 
-                <!-- Bottom: Station Selector -->
+                <!-- Station Selector -->
                 <div class="station-section">
                     <form id="stationForm">
                         <select id="stationDropdown" name="station_name">
@@ -53,13 +47,12 @@
                             </option>
                             {% endfor %}
                         </select>
-                        <input type="submit" value="Enter" />
+                        <input type="submit" value="Start Syncing" />
                     </form>
                 </div>
             </div>
             <script src="{{ url_for('static', filename='polling.js') }}"></script>
         </div>
-        </section>
     </div>
 </body>
 

@@ -15,6 +15,8 @@ from stations import stations
 from flask_cors import CORS
 from flask import Flask, redirect, render_template, request, session, jsonify
 
+load_dotenv()
+
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET")
 CORS(app)

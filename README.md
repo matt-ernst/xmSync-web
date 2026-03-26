@@ -52,7 +52,7 @@ Due to [Spotify's April 15th, 2025 API limitations](https://developer.spotify.co
 * Users of your application can be added here (max of 25), the owner is automatically given permission. 
 
 ## 3.) Supply Credentials in Environment File
-* Create a .env file in the script directory
+* Create a .env file in the xmSync-web directory
   
   ```
   FLASK_SECRET=your_flask_secret_key
