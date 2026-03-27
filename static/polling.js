@@ -62,7 +62,7 @@ function pollStation() {
         if (data.song) {
             songInfoDiv.innerHTML = `
                 <img src="${data.song.Image}" alt="Song Image" width="200"><br>
-                <strong><em>${data.song.Title}</em></strong><br>${data.song.Artist}<br><em>Added to Queue</em>
+                <strong><em>${data.song.Title}</em></strong><br>${data.song.Artist}
             `;
             if (data.new_song_added) {
                 showToast(data.song);
