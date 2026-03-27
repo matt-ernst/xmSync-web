@@ -27,7 +27,13 @@ class SpotifyProvider(MusicProvider):
         params = {'uri': song_uri}
         response = requests.post(endpoint, headers=headers, params=params)
 
-        if response.status_code not in [201, 204]:
+        if response.status_code == 404:
+            # Spotify returns 404 when there is no active playback device.
+            # The track will appear in the queue once the user starts playing.
+            print(f"Spotify queue: no active device (404) — song queued for next playback session.")
+            return
+
+        if response.status_code not in [200, 201, 204]:
             raise Exception(f"Failed to add song to queue: " + response.text)
         
     def get_name(self):

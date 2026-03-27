@@ -186,7 +186,7 @@ def poll_station():
         except Exception as e:
             print(f'Error adding to queue: {e}')
             return jsonify({'song': song_info, 'new_song_added': False,
-                            'error': 'Failed to add song to queue.'}), 500
+                            'error': 'Failed to add song to queue.'}), 200
 
     return jsonify({'song': song_info, 'new_song_added': new_song_added})
 
