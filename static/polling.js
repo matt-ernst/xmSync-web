@@ -64,6 +64,9 @@ function pollStation() {
                 <img src="${data.song.Image}" alt="Song Image" width="200"><br>
                 <strong><em>${data.song.Title}</em></strong><br>${data.song.Artist}<br><em>Added to Queue</em>
             `;
+            if (data.new_song_added) {
+                showToast(data.song);
+            }
         } else {
             console.log(data)
             songInfoDiv.textContent = 'No Playable Song Found, Try a Different Station';
@@ -75,4 +78,26 @@ function pollStation() {
         console.error('Polling error:', error);
         pollingTimeout = setTimeout(pollStation, pollInterval);
     });
+}
+
+function showToast(song) {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `
+        <img class="toast-art" src="${song.Image}" alt="">
+        <div class="toast-body">
+            <div class="toast-label">Added to Queue</div>
+            <div class="toast-title">${song.Title}</div>
+            <div class="toast-artist">${song.Artist}</div>
+        </div>
+    `;
+    container.appendChild(toast);
+
+    setTimeout(function () {
+        toast.classList.add('toast-out');
+        toast.addEventListener('animationend', function () { toast.remove(); }, { once: true });
+    }, 3500);
 }
