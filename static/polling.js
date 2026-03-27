@@ -99,5 +99,5 @@ function showToast(song) {
     setTimeout(function () {
         toast.classList.add('toast-out');
         toast.addEventListener('animationend', function () { toast.remove(); }, { once: true });
-    }, 3500);
+    }, 30000);
 }
