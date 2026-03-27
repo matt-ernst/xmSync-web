@@ -37,21 +37,86 @@
                 <!-- Station Selector -->
                 <div class="station-section">
                     <form id="stationForm">
-                        <select id="stationDropdown" name="station_name">
-                            <option value="" disabled selected>
-                                Select SiriusXM Station
-                            </option>
-                            {% for station in station_options %}
-                            <option value="{{ station.value }}">
-                                {{ station.display }}
-                            </option>
-                            {% endfor %}
-                        </select>
-                        <input type="submit" value="Start Syncing" />
+                        <div class="station-search-wrapper">
+                            <input
+                                type="text"
+                                id="stationSearch"
+                                class="station-search-input"
+                                placeholder="Search stations…"
+                                autocomplete="off"
+                                aria-label="Search SiriusXM stations"
+                                aria-autocomplete="list"
+                                aria-controls="stationList"
+                            />
+                            <ul id="stationList" class="station-list" hidden role="listbox">
+                                {% for station in station_options %}
+                                <li class="station-list-item" data-value="{{ station.value }}" role="option">
+                                    {{ station.display }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <input type="hidden" id="stationDropdown" name="station_name" />
+                        <input type="submit" id="syncBtn" value="Start Syncing" disabled />
                     </form>
                 </div>
             </div>
             <script src="{{ url_for('static', filename='polling.js') }}"></script>
+            <script>
+            (function () {
+                const searchInput = document.getElementById('stationSearch');
+                const stationList = document.getElementById('stationList');
+                const hiddenInput = document.getElementById('stationDropdown');
+                const syncBtn    = document.getElementById('syncBtn');
+                const items      = Array.from(stationList.querySelectorAll('.station-list-item'));
+
+                function showList() { stationList.hidden = false; }
+                function hideList() { stationList.hidden = true; }
+
+                function filterItems(query) {
+                    const q = query.trim().toLowerCase();
+                    let hasVisible = false;
+                    items.forEach(function (item) {
+                        const match = !q || item.textContent.toLowerCase().includes(q);
+                        item.style.display = match ? '' : 'none';
+                        if (match) hasVisible = true;
+                    });
+                    stationList.hidden = !hasVisible;
+                }
+
+                searchInput.addEventListener('focus', function () {
+                    filterItems(this.value);
+                });
+
+                searchInput.addEventListener('input', function () {
+                    hiddenInput.value = '';
+                    syncBtn.disabled = true;
+                    filterItems(this.value);
+                });
+
+                // mousedown fires before blur, so we prevent default to keep focus
+                stationList.addEventListener('mousedown', function (e) {
+                    const item = e.target.closest('.station-list-item');
+                    if (!item) return;
+                    e.preventDefault();
+                    searchInput.value  = item.textContent.trim();
+                    hiddenInput.value  = item.dataset.value;
+                    syncBtn.disabled   = false;
+                    hideList();
+                });
+
+                document.addEventListener('click', function (e) {
+                    if (!e.target.closest('.station-search-wrapper')) {
+                        hideList();
+                    }
+                });
+
+                searchInput.addEventListener('blur', function () {
+                    // Short delay so mousedown on a list item can fire first
+                    setTimeout(hideList, 150);
+                });
+            })();
+            </script>
         </div>
     </div>
 </body>

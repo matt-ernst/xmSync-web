@@ -6,7 +6,7 @@ from providers.amazon_provider import AmazonProvider
 from providers.apple_provider import AppleProvider
 
 from dotenv import load_dotenv
-from stations import stations
+from stations import get_stations
 from flask_cors import CORS
 from flask import Flask, redirect, render_template, request, session, jsonify
 
@@ -106,7 +106,7 @@ def dashboard():
     display_name = session.get('display_name')
     station_options = [
         {"display": key, "value": value}
-        for key, value in stations.items()
+        for key, value in get_stations().items()
     ]
     return render_template("dashboard.html", display_name=display_name, station_options=station_options)
 

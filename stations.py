@@ -1,85 +1,52 @@
-stations = {
-    "2 - SiriusXM Hits 1": "siriusxmhits1",
-    "3 - Unwell Music": "unwellmusic",
-    "4 - TikTok Radio": "tiktokradio",
-    "5 - The Pulse": "thepulse",
-    "6 - PopRocks": "poprocks",
-    "7 - 70s on 7": "70son7",
-    "8 - 80s on 8": "80son8",
-    "9 - 90s on 9": "90son9",
-    "10 - Pop2K": "pop2k",
-    "11 - The 10s Spot": "the10sspot",
-    "12 - The Kelly Clarkson Connection": "kellyclarksonconnection",
-    "13 - Pitbull's Globalization": "pitbullsglobalization",
-    "14 - Life With John Mayer": "lifewithjohnmayer",
-    "15 - Yacht Rock Radio": "yachtrockradio",
-    "16 - The Blend": "theblend",
-    "17 - The Coffee House": "thecoffeehouse",
-    "18 - The Beatles Channel": "thebeatleschannel",
-    "19 - Bob Marley's Tuff Gong Radio": "bobmarleystuffgong",
-    "20 - E Street Radio": "estreetradio",
-    "21 - Little Steven's Underground Garage": "undergroundgarage",
-    "22 - Pearl Jam Radio": "pearljamradio",
-    "23 - Grateful Dead Radio": "gratefuldead",
-    "24 - Radio Margaritaville": "radiomargaritaville",
-    "25 - Classic Rewind": "classicrewind",
-    "26 - Classic Vinyl": "classicvinyl",
-    "27 - The Bridge": "thebridge",
-    "28 - The Spectrum": "thespectrum",
-    "29 - Phish Radio": "phishradio",
-    "30 - Dave Matthews Band Radio": "davematthewsbandradio",
-    "31 - Tom Petty Radio": "tompettyradio",
-    "32 - U2 X-Radio": "u2xradio",
-    "33 - 1st Wave": "1stwave",
-    "34 - Lithium": "lithium",
-    "35 - SiriusXMU": "siriusxmu",
-    "36 - Alt Nation": "altnation",
-    "37 - Octane": "octane",
-    "38 - Ozzy's Boneyard": "ozzysboneyard",
-    "39 - Hair Nation": "hairnation",
-    "40 - Liquid Metal": "liquidmetal",
-    "41 - SiriusXM Turbo": "siriusxmturbo",
-    "42 - SiriusXM 42": "siriusxm42",
-    "43 - Rock The Bells Radio": "rockthebellsradio",
-    "44 - Hip-Hop Nation": "hiphopnation",
-    "45 - Shade 45": "shade45",
-    "46 - The Heat": "theheat",
-    "47 - Heart & Soul": "heartsoul",
-    "48 - The Flow": "theflow",
-    "49 - Flex 2K": "flex2k",
-    "50 - SiriusXM Fly": "siriusxmfly",
-    "51 - The Groove": "thegroove",
-    "52 - BPM": "bpm",
-    "53 - Diplo's Revolution": "diplosrevolution",
-    "54 - Studio 54": "studio54radio",
-    "55 - SiriusXM Chill": "siriusxmchill",
-    "56 - The Highway": "thehighway",
-    "57 - Y2Kountry": "y2kountry",
-    "58 - Prime Country": "primecountry",
-    "59 - No Shoes Radio": "noshoesradio",
-    "60 - Carrie Country": "carriescountry",
-    "61 - Willie's Roadhouse": "williesroadhouse",
-    "62 - Outlaw Country": "outlawcountry",
-    "63 - Chris Stapleton Radio": "chrisstapletonradio",
-    "64 - Kirk Franklin's Praise": "kirkfranklinspraise",
-    "65 - The Message": "themessage",
-    "66 - Watercolors": "watercolors",
-    "67 - Real Jazz": "realjazz",
-    "68 - Spa": "spa",
-    "69 - On Broadway": "onbroadway",
-    "70 - Siriusly Sinatra": "siriuslysinatra",
-    "71 - 40s Junction": "40sjunction",
-    "72 - 50s Gold": "50sgold",
-    "73 - 60s Gold": "60sgold",
-    "74 - Smokey's Soul Town": "smokeyssoultown",
-    "75 - BB King's Bluesville": "bbkingsbluesville",
-    "76 - Elvis Radio": "elvisradio",
-    "77 - Bluegrass Junction": "bluegrassjunction",
-    "78 - Symphony Hall": "symphonyhall",
-    "79 - Bily Joel Channel": "billyjoelchannel",
-    "105 - SiriusXM 105": "siriusxm105",
-    "133 - Disney Hits": "disneyhits",
-    "134 - Kids Place": "kidsplace",
-    "135 - Kidz Bop Radio": "kidzbopradio",
-    "136 - Moonbug Radio": "moonbugradio",
-}
+import time
+import threading
+from typing import Optional
+import cloudscraper
+
+_CACHE_TTL = 86400  # 24 hours
+_cache: Optional[dict] = None
+_cache_time: float = 0
+_lock = threading.Lock()
+
+
+def get_stations():
+    """Return {name: deeplink} for all visible stations fetched from xmplaylist.com.
+
+    Results are cached for 24 h. Returns stale cache or empty dict if unreachable.
+    """
+    global _cache, _cache_time
+
+    now = time.time()
+    # Fast path — no lock needed for a fresh cache read
+    if _cache is not None and (now - _cache_time) < _CACHE_TTL:
+        return _cache
+
+    # Slow path — acquire lock so only one thread/greenlet fetches at a time
+    with _lock:
+        # Re-check inside the lock (another thread may have populated it)
+        now = time.time()
+        if _cache is not None and (now - _cache_time) < _CACHE_TTL:
+            return _cache
+
+        try:
+            scraper = cloudscraper.create_scraper(
+                browser={"browser": "chrome", "platform": "windows", "mobile": False}
+            )
+            response = scraper.get("https://xmplaylist.com/api/station", timeout=10)
+            response.raise_for_status()
+            results = response.json().get("results", [])
+            fetched = {
+                r["name"]: r["deeplink"]
+                for r in results
+                if r.get("isVisible", True) and r.get("name") and r.get("deeplink")
+            }
+            if fetched:
+                _cache = fetched
+                _cache_time = now
+                print(f"Stations refreshed from API ({len(fetched)} stations).")
+                return _cache
+        except Exception as exc:
+            print(f"Failed to fetch stations from API: {exc}")
+
+        # Return stale cache if available, otherwise empty (API is required)
+        return _cache if _cache is not None else {}
